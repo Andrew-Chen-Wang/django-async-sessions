@@ -1,0 +1,9 @@
+asgiref==3.2.10
+Django==3.1.2
+pytz==2020.1
+sqlparse==0.4.0
+uvicorn
+django-redis
+django-async-redis==0.1.0
+watchdog
+wsproto
