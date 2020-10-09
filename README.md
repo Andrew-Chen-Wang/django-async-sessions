@@ -10,26 +10,18 @@ as to how Django Async Redis can work with sessions.
 This repository demonstrates how to use sessions view-wise
 and websocket wise (using native Django 3.0 websockets).
 
-TL;DR It can't. I'm currently working on
-[ticket 32076](https://code.djangoproject.com/ticket/32076)
-which will finally introduce the async cache methods.
-That means you can finally use django.core.cache... almost.
+TL;DR It can't for all standard apps like the admin.
+The problem lies in the fact that Django has not
+implemented the async methods for `django.contrib.auth`
+and other areas, so the methods are simply not called.
 
-The problem I immediately saw before I even created 
-django-async-redis was that on each request, the cache
-must close. But Django signals is still synchronous only.
-
-Additionally, the cache session backend that django-redis
-uses is the default because the cache backend for that is
-set to use the synchronous methods of CacheHandler. Since
-my ticket is the first to introduce async cache, there are
-no methods for sessions to work properly.
-
-I've implemented a class in `public/websockets/index.py`
-that is basically ASGIRequest remade into Websocket stuff
-so that I could easily access the headers and cookies.
-Finally, I check the cache and voila you find the session
-in the cache.
+In the session branch of django-async-redis, you'll see
+a locally tested but not unit tested code for sessions.
+If you try to login to the admin, you won't be given
+the admin page. Instead, even though the session is set,
+you aren't being authenticated and the session key is
+not saved since the contrib apps are not designed for
+async yet.
 
 ---
 ### Instructions
